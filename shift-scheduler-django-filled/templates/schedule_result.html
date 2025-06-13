@@ -2,30 +2,75 @@
 <html>
 <head>
     <title>Jadwal Shift</title>
+    <meta charset="UTF-8">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <style>
-        table { border-collapse: collapse; width: 100%; margin-bottom: 40px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
         .name-0 { background-color: #ffe0e0; }
         .name-1 { background-color: #e0ffe0; }
         .name-2 { background-color: #e0e0ff; }
         .name-3 { background-color: #fff0b3; }
+
+        table { width: 100%; margin-bottom: 40px; }
     </style>
 </head>
 <body>
-    <h2>Jadwal Shift</h2>
-    <table>
-        <tr><th>Tanggal</th><th>Nama</th><th>Shift</th></tr>
-        {% for shift in shifts %}
-        <tr><td>{{ shift.date }}</td><td>{{ shift.staff.name }}</td><td>{{ shift.get_shift_display }}</td></tr>
-        {% endfor %}
-    </table>
-    <h2>Jadwal Libur</h2>
-    <table>
-        <tr><th>Tanggal</th><th>Nama</th></tr>
-        {% for off in days_off %}
-        <tr><td>{{ off.date }}</td><td>{{ off.staff.name }}</td></tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>Jadwal Shift</h2>
+        <table id="shiftTable" class="display table table-bordered table-hover table-striped">
+            <thead>
+                <tr><th>Tanggal</th><th>Nama</th><th>Shift</th></tr>
+            </thead>
+            <tbody>
+                {% for shift in shifts %}
+                <tr>
+                    <td data-order="{{ shift.date }}">{{ shift.date }}</td>
+                    <td data-order="{{ shift.staff.name }}">{{ shift.staff.name }}</td>
+                    <td>{{ shift.get_shift_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Jadwal Libur</h2>
+        <table id="offTable" class="display table table-bordered table-hover table-striped">
+            <thead>
+                <tr><th>Tanggal</th><th>Nama</th></tr>
+            </thead>
+            <tbody>
+                {% for off in days_off %}
+                <tr>
+                    <td data-order="{{ off.date }}">{{ off.date }}</td>
+                    <td data-order="{{ off.staff.name }}">{{ off.staff.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- jQuery + DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#shiftTable, #offTable').DataTable({
+                order: [[0, 'asc']], // default: urut berdasarkan tanggal ASC
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ entri",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    infoEmpty: "Tidak ada data",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Berikutnya",
+                        previous: "Sebelumnya"
+                    },
+                    zeroRecords: "Data tidak ditemukan"
+                }
+            });
+        });
+    </script>
 </body>
 </html>

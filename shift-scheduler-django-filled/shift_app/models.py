@@ -7,8 +7,8 @@ class Staff(models.Model):
 
 class ShiftSchedule(models.Model):
     SHIFT_CHOICES = (
-        ('Pagi', 'Pagi (08:00 - 20:00)'),
-        ('Malam', 'Malam (20:00 - 08:00)'),
+        ('Pagi', 'Pagi (06:00 - 18:00)'),
+        ('Malam', 'Malam (18:00 - 06:00)'),
     )
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE)
     date = models.DateField()
